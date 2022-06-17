@@ -8,5 +8,5 @@ func NewStringCalculator() *StringCalculator {
 }
 
 func (sc *StringCalculator) Add(s string) (result int) {
-	return 0
+	return 1
 }
