@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	utils "github.com/ekinbulut/ttd-kata-go/utils"
+	utils "github.com/ekinbulut/tdd-kata-go/utils"
 )
 
 type StringCalculator struct {
