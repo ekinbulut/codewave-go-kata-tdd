@@ -5,6 +5,8 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+
+	utils "github.com/ekinbulut/ttd-kata-go/utils"
 )
 
 type StringCalculator struct {
@@ -18,34 +20,29 @@ func NewStringCalculator() *StringCalculator {
 }
 
 func (sc *StringCalculator) Add(s string) (result int, err error) {
-	if IsStringEmpty(s) {
+	if utils.IsStringEmpty(s) {
 		return 0, nil
 	}
 
-	delimeter, numbers := sc.ExtractDelimeterAndNumbers(s)
-	return ReplaceAndSplit(numbers, delimeter)
+	delimeter, numbers := sc.extractDelimeterAndNumbers(s)
+	return sc.calculate(numbers, delimeter)
 }
 
-func (sc *StringCalculator) ExtractDelimeterAndNumbers(s string) (d string, n string) {
+func (sc *StringCalculator) extractDelimeterAndNumbers(s string) (d string, n string) {
 
 	var delimiter, numbers string
+	delimiter = "\n"
+	numbers = s
 
 	match := sc.expression.FindStringSubmatch(s)
 	if len(match) > 0 {
 		delimiter = match[1]
 		numbers = match[2]
-		return delimiter, numbers
-	} else {
-		return "\n", s
 	}
-
+	return delimiter, numbers
 }
 
-func IsStringEmpty(s string) bool {
-	return len(s) == 0
-}
-
-func ReplaceAndSplit(s string, d string) (result int, err error) {
+func (sc *StringCalculator) calculate(s string, d string) (result int, err error) {
 	var sum int
 	ns := strings.Replace(s, d, ",", -1)
 	nums := strings.Split(ns, ",")
@@ -54,13 +51,13 @@ func ReplaceAndSplit(s string, d string) (result int, err error) {
 
 	for i := 0; i < len(nums); i++ {
 		n, err := strconv.Atoi(nums[i])
-		if IsNegative(n) {
+		if utils.IsNegative(n) {
 			negatives = append(negatives, nums[i])
 		}
 		if err != nil {
 			return 0, err
 		}
-		if !IsNumberGreaterThan(n, 1000) {
+		if !utils.IsNumberGreaterThan(n, 1000) {
 			sum += n
 		}
 	}
@@ -71,14 +68,4 @@ func ReplaceAndSplit(s string, d string) (result int, err error) {
 	}
 
 	return sum, nil
-}
-
-func IsNegative(n int) bool {
-
-	return n < 0
-}
-
-func IsNumberGreaterThan(n int, l int) bool {
-
-	return n > l
 }
