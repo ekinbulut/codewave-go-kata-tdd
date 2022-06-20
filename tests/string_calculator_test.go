@@ -31,5 +31,5 @@ func Test_Add_Negative_Numbers_Not_Allowed(t *testing.T) {
 	c := sc.NewStringCalculator()
 	_, err := c.Add("-1,-2")
 
-	assert.Errorf(t, err, "negatives not allowed")
+	assert.Error(t, err, "negatives not allowed: -1,-2")
 }

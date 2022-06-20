@@ -1,6 +1,7 @@
 package internals
 
 import (
+	"errors"
 	"regexp"
 	"strconv"
 	"strings"
@@ -39,12 +40,22 @@ func ReplaceAndSplit(s string, d string) (result int, err error) {
 	ns := strings.Replace(s, d, ",", -1)
 	nums := strings.Split(ns, ",")
 
+	negatives := []string{}
+
 	for i := 0; i < len(nums); i++ {
 		n, err := strconv.Atoi(nums[i])
+		if n < 0 {
+			negatives = append(negatives, nums[i])
+		}
 		if err != nil {
 			return 0, err
 		}
 		sum += n
+	}
+
+	if len(negatives) > 0 {
+
+		return 0, errors.New("negatives not allowed: " + strings.Join(negatives, ","))
 	}
 
 	return sum, nil
