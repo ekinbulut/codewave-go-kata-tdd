@@ -8,10 +8,13 @@ import (
 )
 
 type StringCalculator struct {
+	expression *regexp.Regexp
 }
 
 func NewStringCalculator() *StringCalculator {
-	return &StringCalculator{}
+	return &StringCalculator{
+		expression: regexp.MustCompile("^//(.)\n(.*)$"),
+	}
 }
 
 func (sc *StringCalculator) Add(s string) (result int, err error) {
@@ -19,16 +22,23 @@ func (sc *StringCalculator) Add(s string) (result int, err error) {
 		return 0, nil
 	}
 
-	// create a regexp to match the delimiter and the numbers
-	re := regexp.MustCompile("^//(.)\n(.*)$")
-	match := re.FindStringSubmatch(s)
+	delimeter, numbers := sc.ExtractDelimeterAndNumbers(s)
+	return ReplaceAndSplit(numbers, delimeter)
+}
+
+func (sc *StringCalculator) ExtractDelimeterAndNumbers(s string) (d string, n string) {
+
+	var delimiter, numbers string
+
+	match := sc.expression.FindStringSubmatch(s)
 	if len(match) > 0 {
-		delimiter := match[1]
-		numbers := match[2]
-		return ReplaceAndSplit(numbers, delimiter)
+		delimiter = match[1]
+		numbers = match[2]
+		return delimiter, numbers
 	} else {
-		return ReplaceAndSplit(s, "\n")
+		return "\n", s
 	}
+
 }
 
 func IsStringEmpty(s string) bool {
