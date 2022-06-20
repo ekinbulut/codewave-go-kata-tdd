@@ -21,3 +21,10 @@ func Test_Add_With_String(t *testing.T) {
 	assert.Equal(t, 6, c.Add("1\n2,3"))
 	assert.Equal(t, 3, c.Add("//;\n1;2"))
 }
+
+func Test_Add_Negative_Numbers_Not_Allowed(t *testing.T) {
+	c := sc.NewStringCalculator()
+	res, err := c.Add("-1,-2")
+
+	assert.Errorf(t, err, "negatives not allowed")
+}
