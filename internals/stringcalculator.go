@@ -44,13 +44,15 @@ func ReplaceAndSplit(s string, d string) (result int, err error) {
 
 	for i := 0; i < len(nums); i++ {
 		n, err := strconv.Atoi(nums[i])
-		if n < 0 {
+		if IsNegative(n) {
 			negatives = append(negatives, nums[i])
 		}
 		if err != nil {
 			return 0, err
 		}
-		sum += n
+		if !IsNumberGreaterThan(n, 1000) {
+			sum += n
+		}
 	}
 
 	if len(negatives) > 0 {
@@ -59,4 +61,14 @@ func ReplaceAndSplit(s string, d string) (result int, err error) {
 	}
 
 	return sum, nil
+}
+
+func IsNegative(n int) bool {
+
+	return n < 0
+}
+
+func IsNumberGreaterThan(n int, l int) bool {
+
+	return n > l
 }

@@ -39,6 +39,7 @@ func Test_Add_Numbers_Bigger_Than_1000_Should_Be_Ignored(t *testing.T) {
 	c := sc.NewStringCalculator()
 
 	res, _ := c.Add("2,1001")
-
 	assert.Equal(t, 2, res)
+	res, _ = c.Add("2,1001,3")
+	assert.Equal(t, 5, res)
 }
