@@ -13,9 +13,9 @@ func NewStringCalculator() *StringCalculator {
 	return &StringCalculator{}
 }
 
-func (sc *StringCalculator) Add(s string) (result int) {
+func (sc *StringCalculator) Add(s string) (result int, err error) {
 	if IsStringEmpty(s) {
-		return 0
+		return 0, nil
 	}
 
 	// create a regexp to match the delimiter and the numbers
@@ -34,7 +34,7 @@ func IsStringEmpty(s string) bool {
 	return len(s) == 0
 }
 
-func ReplaceAndSplit(s string, d string) (result int) {
+func ReplaceAndSplit(s string, d string) (result int, err error) {
 	var sum int
 	ns := strings.Replace(s, d, ",", -1)
 	nums := strings.Split(ns, ",")
@@ -42,10 +42,10 @@ func ReplaceAndSplit(s string, d string) (result int) {
 	for i := 0; i < len(nums); i++ {
 		n, err := strconv.Atoi(nums[i])
 		if err != nil {
-			return 0
+			return 0, err
 		}
 		sum += n
 	}
 
-	return sum
+	return sum, nil
 }
